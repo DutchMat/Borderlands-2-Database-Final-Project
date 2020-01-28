@@ -1,0 +1,167 @@
+#DDL for creating all of our tables
+
+create table manufacturer(
+manu_id int auto_increment,
+manu_name varchar(100),
+primary key(manu_id)
+)engine=innodb;
+
+create table gun(
+gun_id int auto_increment,
+manu_id int ,
+gun_name varchar(255),
+type varchar(255),
+damage_type varchar(255),
+dropped_by varchar(255),
+minimum_task varchar(255),
+rarity varchar(100),
+manufacturer varchar(200),
+perk varchar(255),
+location varchar(100),
+dlc varchar(255),
+Primary key(gun_id),
+foreign key(manu_id) references manufacturer(manu_id)
+)engine=innodb;
+
+create table grenade(grenade_id int auto_increment, manu_id int, location_id int,item_type varchar(30), grenade_name varchar(150),
+grenade_perk varchar(255), manufacturer varchar(150), location_name varchar(200),damage_type varchar(200), dropped_by varchar(200), minimum_task varchar(200),rarity varchar(50), dlc varchar(100),
+primary key(grenade_id),
+foreign key(manu_id) references manufacturer(manu_id)
+)engine=INNODB;
+
+create table shield(shield_id int auto_increment, manu_id int,location_id int,item_type varchar(100),
+shield_name varchar(150), shield_perk varchar(255),
+manufacturer varchar(255), location_name varchar(255),damage_type varchar(255),
+dropped_by varchar(150), minimum_task varchar(255), rarity varchar(150), dlc varchar(150),Primary key(shield_id), foreign key(manu_id) references manufacturer(manu_id))
+
+CREATE TABLE `location` (
+  `location_id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`location_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=latin1
+
+
+create table class_mod(mod_id int auto_increment, manu_id int, location_id int,item_type varchar(30), mod_name varchar(150),
+mod_perk varchar(255), manufacturer varchar(150), location_name varchar(200),damage_type varchar(200), dropped_by varchar(200), minimum_task varchar(200),rarity varchar(50), dlc varchar(100),
+primary key(mod_id),
+foreign key(manu_id) references manufacturer(manu_id)
+)engine=INNODB;
+
+
+create table vechicle(vechicle_id int auto_increment, vechicle_name varchar(100), vechicle_tye varchar(50),vechicle_crew varchar(255),
+vechicle_armaments varchar(255), location_id int, location_name varchar(255),
+Primary key(vechicle_id), foreign key(location_id) references location(location_id))
+
+
+CREATE TABLE user(
+	user_id int primary key auto_increment,
+    username varchar(20)
+)engine=InnoDB;
+
+Create table badass_rank(
+	user_id int,
+    level int,
+    max_health float(3,1),
+    shield_cap float(3,1),
+    sh_recharge_delay float(3,1),
+    sh_recharge_rate float(3,1),
+    melee_damage float(3,1),
+    grenade_damage float(3,1),
+    gun_accuracy float(3,1),
+    gun_damage float(3,1),
+    fire_rate float(3,1),
+    recoil_reduction float(3,1),
+    reload_speed float(3,1),
+    el_effect_chance float(3,1),
+    el_effect_damage float(3,1),
+    crit_hit_damage float(3,1),
+    foreign key(user_id) references user(user_id),
+    primary key(user_id)
+)engine=innodb;
+
+create table vault_hunter(
+	hunter_id int ,
+    user_id int,
+    class varchar(10),
+    level int,
+    name varchar(20),
+    foreign key(user_id) references user(user_id),
+    primary key(user_id, character_id)
+)engine=innodb;
+
+create table currency(
+	hunter_id int primary key,
+    money int,
+    eridium int,
+    pistol_ammo int,
+    sniper_ammo int,
+    shotgun_ammo int,
+    rifle_ammo int,
+    submachine_ammo int,
+    rocket_ammo int,
+    grendade int
+)engine=innodb;
+
+create table equipped(
+	user_id int,
+    gun_1 int,
+    gun_2 int,
+    gun_3 int,
+    gun_4 int,
+    grenade_mod int,
+    class_mod int,
+    artifact int,
+    foreign key(user_id) references user(user_id),
+    foreign key(gun_1) references gun(gun_id),
+    foreign key(gun_2) references gun(gun_id),
+    foreign key(gun_3) references gun(gun_id),
+    foreign key(gun_4) references gun(gun_id),
+    foreign key(grenade_mod) references grenade(grenade_id),
+    foreign key(class_mod) references class_mod(mod_id),
+    foreign key(artifact) references artifact(artifact_id)
+)engine=innodb;
+
+create table inventory(
+	hunter_id int,
+    inv_num int ,
+    item_id int,
+    foreign key(hunter_id) references vault_hunter(hunter_id),
+    primary key(hunter_id, inv_num)
+)engine=innodb;
+
+create table enemy(
+	enemy_id int auto_increment,
+    location_id int,
+    name varchar(255),
+    foreign key(location_id) references location(location_id),
+    primary key(enemy_id)
+)engine=InnoDB;
+
+create table npc(
+	npc_ID int primary key auto_increment,
+    location_id int,
+    name varchar(50),
+    foreign key(location_id) references location(location_id)
+)engine=innodb;
+
+CREATE TABLE `relic` (
+  `relic_id` int(11) NOT NULL AUTO_INCREMENT,
+  `manu_id` int(11) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `item_type` varchar(30) DEFAULT NULL,
+  `relic_name` varchar(150) DEFAULT NULL,
+  `relic_perk` varchar(255) DEFAULT NULL,
+  `manufacturer` varchar(150) DEFAULT NULL,
+  `location_name` varchar(200) DEFAULT NULL,
+  `damage_type` varchar(200) DEFAULT NULL,
+  `dropped_by` varchar(200) DEFAULT NULL,
+  `minimum_task` varchar(200) DEFAULT NULL,
+  `rarity` varchar(50) DEFAULT NULL,
+  `dlc` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`relic_id`),
+  KEY `manu_id` (`manu_id`),
+  KEY `location_id` (`location_id`),
+  CONSTRAINT `relic_ibfk_1` FOREIGN KEY (`manu_id`) REFERENCES `manufacturer` (`manu_id`),
+  CONSTRAINT `relic_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1
+
